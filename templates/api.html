@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Ghostbot Web - API</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body x-data="{ isMenuOpen: false }" :class="isMenuOpen ? 'no-scroll' : ''">
+    <div id="app-wrapper">
+        <header class="top-navbar">
+            <div class="nav-left">
+                <a href="{{ url_for('index') }}" class="nav-logo">Ghostbot Web</a>
+            </div>
+            <div class="nav-center">
+                <nav class="nav-links">
+                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                    <a href="{{ url_for('models') }}" class="nav-link">Models</a>
+                    <a href="{{ url_for('api') }}" class="nav-link active">API</a>
+                </nav>
+            </div>
+            <div class="nav-right">
+                <button class="hamburger-menu" @click="isMenuOpen = !isMenuOpen" aria-label="Toggle menu">
+                    <i data-lucide="menu" x-show="!isMenuOpen"></i>
+                    <i data-lucide="x" x-show="isMenuOpen" x-cloak></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="container">
+            <aside class="sidebar">
+                <div class="form-content">
+                    <div class="form-card settings-card" style="margin-bottom: 24px;">
+                        <h3>Generate API Key</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">Generate an API key to access our image generation endpoints programmatically.</p>
+                        <button class="create-button" id="generate-key-btn">
+                            <i data-lucide="key-round" style="margin-right: 8px; width: 20px; height: 20px;"></i>
+                            <span>Generate Key</span>
+                        </button>
+                        <div id="api-key-display-container" class="hidden" style="margin-top: 16px;">
+                            <h4 style="margin: 0 0 8px 0; color: var(--text-primary);">Your API Key</h4>
+                            <div class="api-key-result">
+                                <code id="api-key-display" style="word-break: break-all;"></code>
+                                <button id="copy-key-btn" class="copy-button" title="Copy to clipboard">
+                                    <i data-lucide="copy" style="width: 16px; height: 16px;"></i>
+                                </button>
+                            </div>
+                            <p id="api-key-message" style="color: var(--text-secondary); font-size: 12px; margin: 8px 0 0 0;"></p>
+                        </div>
+                    </div>
+
+                    <div class="form-card prompt-card">
+                        <h2>API Information</h2>
+                        <p style="margin-bottom: 16px;">RESTful API for programmatic image generation with OpenAI-compatible endpoints.</p>
+                        
+                        <div class="api-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">3</div>
+                                <div class="stat-label">Available Models</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">2</div>
+                                <div class="stat-label">API Endpoints</div>
+                            </div>
+                        </div>
+
+                        <div class="api-features">
+                            <div class="feature-item">
+                                <i data-lucide="shield-check"></i>
+                                <span>Secure Authentication</span>
+                            </div>
+                            <div class="feature-item">
+                                <i data-lucide="zap"></i>
+                                <span>Fast Response Times</span>
+                            </div>
+                            <div class="feature-item">
+                                <i data-lucide="code"></i>
+                                <span>OpenAI Compatible</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-card settings-card">
+                        <h3>Quick Links</h3>
+                        <div class="quick-actions">
+                            <a href="{{ url_for('models') }}" class="action-button">
+                                <i data-lucide="layers"></i>
+                                <span>View Models</span>
+                            </a>
+                            <a href="{{ url_for('index') }}" class="action-button">
+                                <i data-lucide="image-plus"></i>
+                                <span>Try Web Interface</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="content">
+                <div class="api-docs-container">
+
+                    <section class="api-section">
+                        <h2>Authentication</h2>
+                        <p>API requests are authenticated using Bearer Tokens. You must generate an API key using the button above and include it in the <code>Authorization</code> header of your requests. All API requests must be made over HTTPS.</p>
+                        <pre><code>Authorization: Bearer YOUR_API_KEY</code></pre>
+                    </section>
+
+                    <section class="api-section">
+                        <h2>Image Generation</h2>
+                        <details class="api-endpoint" open>
+                            <summary>
+                                <span class="http-method post">POST</span>
+                                <span class="endpoint-path">https://api.infip.pro/v1/images/generations</span>
+                                <span class="endpoint-description">Generate Images (OpenAI Compatible)</span>
+                            </summary>
+                            <div class="api-endpoint-body">
+                                <h3>Request Body</h3>
+                                <p>The request body should be a JSON object containing the following generation parameters:</p>
+                                 <ul style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; padding-left: 20px;">
+                                    <li><code>model</code> (string): The model to use for generation (e.g., "img3", "img4", "uncen").</li>
+                                    <li><code>prompt</code> (string, required): A text description of the desired image(s). Maximum length of 4000 characters.</li>
+                                    <li><code>n</code> (integer): The number of images to generate. Must be between 1 and 4. Defaults to 1.</li>
+                                    <li><code>size</code> (string): The resolution of the image. Examples: "1024x1024", "1792x1024", "1024x1792".</li>
+                                    <li><code>response_format</code> (string): The format of the response. Use "url" to get a link to the image, or "b64_json" for the base64 encoded image.</li>
+                                </ul>
+                                <h4>Example Request:</h4>
+                                <pre><code>{
+    "model": "img4",
+    "n": 1,
+    "prompt": "A vibrant oil painting of a futuristic cityscape at sunset",
+    "response_format": "url",
+    "size": "1792x1024"
+}</code></pre>
+                                <div class="response-section">
+                                    <h3>Responses</h3>
+                                    <div class="response-header"><span class="code">200</span> Successful Response</div>
+                                    <pre><code>{
+    "created": 1677652288,
+    "data": [
+        {
+            "url": "https://example.com/path/to/your/generated_image.png"
+        }
+    ]
+}</code></pre>
+                                </div>
+                                <div class="response-section">
+                                    <div class="response-header"><span class="code" style="color: #f59e0b;">422</span> Validation Error</div>
+                                    <p style="margin-top: 12px;">This error occurs if the request body is invalid (e.g., a required field is missing).</p>
+                                    <pre><code>{
+    "detail": [
+        {
+            "loc": [ "body", "prompt" ],
+            "msg": "field required",
+            "type": "value_error.missing"
+        }
+    ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </details>
+                        
+                        <details class="api-endpoint">
+                            <summary>
+                                <span class="http-method get">GET</span>
+                                <span class="endpoint-path">https://api.infip.pro/v1/models</span>
+                                <span class="endpoint-description">List Available Models</span>
+                            </summary>
+                            <div class="api-endpoint-body">
+                                <h3>Description</h3>
+                                <p>Retrieve a list of all available models that can be used for image generation.</p>
+                                
+                                <h4>Example Request:</h4>
+                                <pre><code>GET https://api.infip.pro/v1/models
+Authorization: Bearer YOUR_API_KEY</code></pre>
+                                
+                                <div class="response-section">
+                                    <h3>Responses</h3>
+                                    <div class="response-header"><span class="code">200</span> Successful Response</div>
+                                    <pre><code>{
+    "object": "list",
+    "data": [
+        {
+            "id": "img3",
+            "object": "model",
+            "created": 1677652288,
+            "owned_by": "infip"
+        },
+        {
+            "id": "img4",
+            "object": "model",
+            "created": 1677652288,
+            "owned_by": "infip"
+        },
+        {
+            "id": "uncen",
+            "object": "model",
+            "created": 1677652288,
+            "owned_by": "infip"
+        }
+    ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </details>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <nav class="mobile-nav-menu" x-show="isMenuOpen" x-transition.opacity x-cloak>
+        <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+        <a href="{{ url_for('models') }}" class="nav-link">Models</a>
+        <a href="{{ url_for('api') }}" class="nav-link active">API</a>
+    </nav>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <script>
+        // Initialize Lucide Icons after the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

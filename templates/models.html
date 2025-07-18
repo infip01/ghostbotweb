@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Ghostbot Web - Models</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body x-data="{ isMenuOpen: false }" :class="isMenuOpen ? 'no-scroll' : ''">
+    <div id="app-wrapper">
+        <header class="top-navbar">
+            <div class="nav-left">
+                <a href="{{ url_for('index') }}" class="nav-logo">Ghostbot Web</a>
+            </div>
+            <div class="nav-center">
+                <nav class="nav-links">
+                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                    <a href="{{ url_for('models') }}" class="nav-link active">Models</a>
+                    <a href="{{ url_for('api') }}" class="nav-link">API</a>
+                </nav>
+            </div>
+            <div class="nav-right">
+                <button class="hamburger-menu" @click="isMenuOpen = !isMenuOpen" aria-label="Toggle menu">
+                    <i data-lucide="menu" x-show="!isMenuOpen"></i>
+                    <i data-lucide="x" x-show="isMenuOpen" x-cloak></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="container">
+            <aside class="sidebar">
+                <div class="form-content">
+                    <div class="form-card prompt-card">
+                        <h2>Available Models</h2>
+                        <p>Explore the different models available for image generation. Each model has unique strengths and characteristics.</p>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="content">
+                <div class="image-grid grid-4" id="model-grid">
+                    <div class="image-card model-card">
+                        <div class="model-info">
+                            <div class="model-header">
+                                <div class="model-icon">
+                                    <i data-lucide="image"></i>
+                                </div>
+                                <h3>Imagen 3</h3>
+                                <span class="model-badge">Stable</span>
+                            </div>
+                            <p class="model-description">A versatile model for generating high-quality images with various styles and artistic approaches.</p>
+                            <div class="model-features">
+                                <div class="feature-item">
+                                    <i data-lucide="zap"></i>
+                                    <span>Fast Generation</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="palette"></i>
+                                    <span>Multiple Styles</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="settings"></i>
+                                    <span>Customizable</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-card model-card">
+                        <div class="model-info">
+                            <div class="model-header">
+                                <div class="model-icon">
+                                    <i data-lucide="sparkles"></i>
+                                </div>
+                                <h3>Imagen 4</h3>
+                                <span class="model-badge latest">Latest</span>
+                            </div>
+                            <p class="model-description">Our most advanced model with improved detail, accuracy, and enhanced capabilities for professional image generation.</p>
+                            <div class="model-features">
+                                <div class="feature-item">
+                                    <i data-lucide="eye"></i>
+                                    <span>High Detail</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="cpu"></i>
+                                    <span>AI Enhanced</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="star"></i>
+                                    <span>Premium Quality</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-card model-card">
+                        <div class="model-info">
+                            <div class="model-header">
+                                <div class="model-icon">
+                                    <i data-lucide="unlock"></i>
+                                </div>
+                                <h3>Uncensored</h3>
+                                <span class="model-badge special">Unrestricted</span>
+                            </div>
+                            <p class="model-description">A specialized model designed for unrestricted content creation with maximum creative freedom and flexibility.</p>
+                            <div class="model-features">
+                                <div class="feature-item">
+                                    <i data-lucide="shield-off"></i>
+                                    <span>No Restrictions</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="brush"></i>
+                                    <span>Creative Freedom</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="infinity"></i>
+                                    <span>Unlimited</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-card model-card">
+                        <div class="model-info">
+                            <div class="model-header">
+                                <div class="model-icon">
+                                    <i data-lucide="zap"></i>
+                                </div>
+                                <h3>Kontext Max</h3>
+                                <span class="model-badge">Advanced</span>
+                            </div>
+                            <p class="model-description">FLUX.1 Kontext Max - A powerful model optimized for maximum context understanding and detailed image generation with enhanced capabilities.</p>
+                            <div class="model-features">
+                                <div class="feature-item">
+                                    <i data-lucide="brain"></i>
+                                    <span>Context Aware</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="maximize"></i>
+                                    <span>Maximum Detail</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="layers"></i>
+                                    <span>Complex Scenes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-card model-card">
+                        <div class="model-info">
+                            <div class="model-header">
+                                <div class="model-icon">
+                                    <i data-lucide="crown"></i>
+                                </div>
+                                <h3>Kontext Pro</h3>
+                                <span class="model-badge special">Professional</span>
+                            </div>
+                            <p class="model-description">FLUX.1 Kontext Pro - Professional-grade model with superior context handling, ideal for commercial and artistic applications.</p>
+                            <div class="model-features">
+                                <div class="feature-item">
+                                    <i data-lucide="award"></i>
+                                    <span>Pro Quality</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="target"></i>
+                                    <span>Precision Control</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="sparkle"></i>
+                                    <span>Enhanced Output</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-card model-card">
+                        <div class="model-info">
+                            <div class="model-header">
+                                <div class="model-icon">
+                                    <i data-lucide="rocket"></i>
+                                </div>
+                                <h3>Flux 1.1 Pro</h3>
+                                <span class="model-badge latest">Latest</span>
+                            </div>
+                            <p class="model-description">FLUX.1.1 Pro - The newest and most advanced FLUX model with enhanced capabilities and improved performance.</p>
+                            <div class="model-features">
+                                <div class="feature-item">
+                                    <i data-lucide="trending-up"></i>
+                                    <span>Enhanced Performance</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="star"></i>
+                                    <span>Latest Technology</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="zap"></i>
+                                    <span>Optimized Speed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-card model-card">
+                        <div class="model-info">
+                            <div class="model-header">
+                                <div class="model-icon">
+                                    <i data-lucide="code"></i>
+                                </div>
+                                <h3>Flux Dev</h3>
+                                <span class="model-badge">Development</span>
+                            </div>
+                            <p class="model-description">FLUX.1 Dev - Development version with experimental features and cutting-edge capabilities for advanced users.</p>
+                            <div class="model-features">
+                                <div class="feature-item">
+                                    <i data-lucide="flask"></i>
+                                    <span>Experimental</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="settings"></i>
+                                    <span>Advanced Features</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="users"></i>
+                                    <span>Developer Focused</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-card model-card">
+                        <div class="model-info">
+                            <div class="model-header">
+                                <div class="model-icon">
+                                    <i data-lucide="gem"></i>
+                                </div>
+                                <h3>Flux Pro</h3>
+                                <span class="model-badge special">Professional</span>
+                            </div>
+                            <p class="model-description">FLUX.1 Pro - Professional-grade model optimized for commercial use with superior quality and reliability.</p>
+                            <div class="model-features">
+                                <div class="feature-item">
+                                    <i data-lucide="briefcase"></i>
+                                    <span>Commercial Grade</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="shield-check"></i>
+                                    <span>Reliable</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="award"></i>
+                                    <span>High Quality</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-card model-card">
+                        <div class="model-info">
+                            <div class="model-header">
+                                <div class="model-icon">
+                                    <i data-lucide="wind"></i>
+                                </div>
+                                <h3>Flux Schnell</h3>
+                                <span class="model-badge">Fast</span>
+                            </div>
+                            <p class="model-description">FLUX.1 Schnell - Ultra-fast model designed for rapid image generation with optimized speed and efficiency.</p>
+                            <div class="model-features">
+                                <div class="feature-item">
+                                    <i data-lucide="clock"></i>
+                                    <span>Ultra Fast</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="cpu"></i>
+                                    <span>Optimized</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i data-lucide="gauge"></i>
+                                    <span>Efficient</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <nav class="mobile-nav-menu" x-show="isMenuOpen" x-transition.opacity x-cloak>
+        <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+        <a href="{{ url_for('models') }}" class="nav-link active">Models</a>
+        <a href="{{ url_for('api') }}" class="nav-link">API</a>
+    </nav>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <script>
+        // Initialize Lucide Icons after the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

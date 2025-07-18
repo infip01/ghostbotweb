@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Block/Unblock IP Address</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            gap: var(--spacing-xl);
+        }
+        .block-container {
+            background-color: var(--card-bg);
+            padding: var(--spacing-xl);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+        input[type="text"] {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: var(--font-md);
+            color: var(--text-primary);
+            width: 100%;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--focus-border-color);
+        }
+        .block-button {
+            background-color: #F28B82; /* Red for blocking */
+            color: var(--yellow-accent-dark);
+        }
+        .block-button:hover {
+            background-color: #e86c60;
+        }
+        .unblock-button {
+             background-color: var(--api-green); /* Green for unblocking */
+             color: var(--yellow-accent-dark);
+        }
+        .unblock-button:hover {
+            background-color: #1ca94e;
+        }
+        .message {
+            margin-top: var(--spacing-lg);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="block-container">
+        <h1>Block IP Address</h1>
+        <form action="{{ url_for('block_ip') }}" method="POST">
+            <input type="text" name="ip" placeholder="Enter IP to block" required>
+            <button type="submit" class="create-button block-button">Block IP</button>
+        </form>
+    </div>
+    
+    <div class="block-container">
+        <h1>Unblock IP Address</h1>
+        <form action="{{ url_for('unblock_ip_route') }}" method="POST">
+            <input type="text" name="ip" placeholder="Enter IP to unblock" required>
+            <button type="submit" class="create-button unblock-button">Unblock IP</button>
+        </form>
+    </div>
+
+    {% if message %}
+        <p class="message">{{ message }}</p>
+    {% endif %}
+</body>
+</html>

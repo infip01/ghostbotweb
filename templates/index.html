@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Ghostbot Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body x-data="{ isMenuOpen: false }" :class="isMenuOpen ? 'no-scroll' : ''">
+    <div id="app-wrapper">
+        <header class="top-navbar">
+            <div class="nav-left">
+                <a href="{{ url_for('index') }}" class="nav-logo">Ghostbot Web</a>
+            </div>
+            <div class="nav-center">
+                <nav class="nav-links">
+                    <a href="{{ url_for('index') }}" class="nav-link active">Home</a>
+                    <a href="{{ url_for('models') }}" class="nav-link">Models</a>
+                    <a href="{{ url_for('api') }}" class="nav-link">API</a>
+                </nav>
+            </div>
+            <div class="nav-right">
+                <button class="hamburger-menu" @click="isMenuOpen = !isMenuOpen" aria-label="Toggle menu">
+                    <i data-lucide="menu" x-show="!isMenuOpen"></i>
+                    <i data-lucide="x" x-show="isMenuOpen" x-cloak></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="container">
+            <aside class="sidebar">
+                <form id="generate-form" method="POST" class="form-content">
+                    
+                    <div class="form-card prompt-card">
+                        <textarea id="prompt" name="prompt" rows="1" placeholder="Describe what you want to create..."></textarea>
+                        <div class="prompt-actions-footer">
+                            <button type="submit" class="create-button">
+                                <i data-lucide="sparkles" style="margin-right: 8px; width: 20px; height: 20px;"></i> Create
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-card upload-card">
+                        <div class="form-group">
+                            <label for="image-upload">Reference Image (Optional)</label>
+                            
+                            <!-- Toggle buttons for upload method -->
+                            <div class="upload-method-toggle">
+                                <button type="button" id="upload-file-btn" class="toggle-btn active">
+                                    <i data-lucide="upload" style="width: 16px; height: 16px; margin-right: 6px;"></i>
+                                    Upload File
+                                </button>
+                                <button type="button" id="paste-url-btn" class="toggle-btn">
+                                    <i data-lucide="link" style="width: 16px; height: 16px; margin-right: 6px;"></i>
+                                    Paste URL
+                                </button>
+                            </div>
+                            
+                            <!-- File upload area -->
+                            <div class="upload-area" id="upload-area">
+                                <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                                <div class="upload-content">
+                                    <i data-lucide="upload" style="width: 24px; height: 24px; margin-bottom: 8px;"></i>
+                                    <span>Click to upload or drag & drop</span>
+                                    <small>PNG, JPG, JPEG, GIF, BMP, WebP</small>
+                                </div>
+                            </div>
+                            
+                            <!-- URL input area -->
+                            <div class="url-input-area" id="url-input-area" style="display: none;">
+                                <input type="url" id="image-url-input" placeholder="https://example.com/image.jpg" />
+                                <button type="button" id="load-url-btn" class="load-url-btn">
+                                    <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                                    Load
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="uploaded-file-preview" class="uploaded-file-preview" style="display: none;">
+                            <div class="file-preview-card">
+                                <img id="preview-image" src="" alt="Preview">
+                                <div class="file-info">
+                                    <span id="file-name"></span>
+                                    <button type="button" id="remove-file" class="remove-file-btn">
+                                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-card settings-card" style="flex-basis: 20%;">
+                        <div class="form-group">
+                            <label for="num_images">Number of Images</label>
+                            <div class="custom-select">
+                                <select id="num_images" name="num_images">
+                                    <option value="1">1 Image</option>
+                                    <option value="2">2 Images</option>
+                                    <option value="4" selected>4 Images</option>
+                                </select>
+                            </div>
+                            <span id="num_images_static" style="display: none;">Uncensored model is limited to 1 image.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="model">Model</label>
+                            <div class="custom-select">
+                                <select id="model" name="model" onchange="toggleNumImages()">
+                                    <option value="img3">Imagen 3</option>
+                                    <option value="img4" selected>Imagen 4</option>
+                                    <option value="uncen">Uncensored</option>
+                                    <option value="kontext-max">Kontext Max</option>
+                                    <option value="kontext-pro">Kontext Pro</option>
+                                    <option value="flux-1-1-pro">Flux 1.1 Pro</option>
+                                    <option value="flux-dev">Flux Dev</option>
+                                    <option value="flux-pro">Flux Pro</option>
+                                    <option value="flux-schnell">Flux Schnell</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" data-id="aspect_ratio">
+                            <label for="aspect_ratio">Aspect Ratio</label>
+                            <div class="custom-select">
+                                <select id="aspect_ratio" name="aspect_ratio">
+                                    <option value="IMAGE_ASPECT_RATIO_SQUARE">Square</option>
+                                    <option value="IMAGE_ASPECT_RATIO_PORTRAIT">Portrait</option>
+                                    <option value="IMAGE_ASPECT_RATIO_LANDSCAPE" selected>Landscape</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </aside>
+
+            <main class="content">
+                <div class="image-grid" id="image-grid">
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <nav class="mobile-nav-menu" x-show="isMenuOpen" x-transition.opacity x-cloak>
+    <button @click="isMenuOpen = false" aria-label="Close menu" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text-primary);font-size:32px;z-index:1003;">
+        <i data-lucide="x"></i>
+    </button>
+        <a href="{{ url_for('index') }}" class="nav-link active">Home</a>
+        <a href="{{ url_for('models') }}" class="nav-link">Models</a>
+        <a href="{{ url_for('api') }}" class="nav-link">API</a>
+    </nav>
+
+    <div id="enlarged-image-card" class="hidden">
+        <div class="enlarged-image-content">
+            <div class="enlarged-image-body">
+                <img id="enlarged-image" src="" alt="Enlarged Image">
+            </div>
+            <div class="enlarged-image-actions">
+                <a id="download-enlarged" href="#" download title="Download">
+                    <i data-lucide="download" style="margin-right: 8px; width: 16px; height: 16px;"></i> Download
+                </a>
+                <button id="close-enlarged-image" title="Close">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    
+    <script>
+        // Initialize Lucide Icons after the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
