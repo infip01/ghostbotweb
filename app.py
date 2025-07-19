@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, send_file, jsonify, Response, url_for
+from flask import send_from_directory
 import requests
 import json
 import random
@@ -29,6 +30,20 @@ except ImportError:
         pass
 
 app = Flask(__name__)
+
+# Serve React static files
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_react_app(path):
+    if path != "" and os.path.exists(os.path.join('dist', path)):
+        return send_from_directory('dist', path)
+    else:
+        return send_from_directory('dist', 'index.html')
+
+# Serve static assets
+@app.route('/assets/<path:filename>')
+def serve_assets(filename):
+    return send_from_directory('dist/assets', filename)
 
 # --- Telegram Bot Configuration ---
 TELEGRAM_BOT_TOKEN = "8075529195:AAEIsCBp74oJG2ooIrx8k4B0NHGHqI4tggs"
@@ -477,19 +492,6 @@ def api_generate():
         print(f"Error in /api/generate route: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/models')
-def models():
-    """Renders the models page."""
-    return render_template('models.html')
-
-@app.route('/api')
-def api():
-    """Renders the API documentation page."""
-    return render_template('api.html')
 
 @app.route('/block', methods=['GET', 'POST'])
 @requires_auth
